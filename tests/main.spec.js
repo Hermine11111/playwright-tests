@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const { AuthPage } = require('../pages/authPage');
 const { ProductPage } = require('../pages/productPage');
 
-test('User signs up with valid credentials', async ({ page }) => {
+test('User is able to sign up with valid credentials', async ({ page }) => {
   const auth = new AuthPage(page);
 
   await auth.openLogin();
@@ -25,11 +25,14 @@ test('User signs up with valid credentials', async ({ page }) => {
     password: 'Password123'
   });
 
-  // Check login form is visible instead of URL
+  // Check that the login form is visible instead of URL (assertion for successful registration)
   await expect(auth.email).toBeVisible();
+
+  // Optionally verify account creation via URL or a successful redirect
+  await expect(page).toHaveURL(/\/account/);
 });
 
-test('User signs in with valid credentials', async ({ page }) => {
+test('User is able to sign in with valid credentials', async ({ page }) => {
   const auth = new AuthPage(page);
 
   await auth.openLogin();
@@ -39,7 +42,7 @@ test('User signs in with valid credentials', async ({ page }) => {
   await expect(page.locator('[data-test="page-title"]')).toHaveText('My account');
 });
 
-test('User views product details', async ({ page }) => {
+test('User is able to view product details', async ({ page }) => {
   const product = new ProductPage(page);
 
   await product.openHome();
@@ -51,7 +54,7 @@ test('User views product details', async ({ page }) => {
   await expect(product.image).toBeVisible();
 });
 
-test('User adds product to basket', async ({ page }) => {
+test('User is able to add product to basket', async ({ page }) => {
   const product = new ProductPage(page);
 
   await product.openHome();
@@ -59,6 +62,8 @@ test('User adds product to basket', async ({ page }) => {
 
   await product.addToBasket();
 
+  // Verify that the cart count increased
   const count = await product.cartCount.innerText();
   expect(Number(count)).toBeGreaterThan(0);
+
 });

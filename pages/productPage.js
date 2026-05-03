@@ -1,7 +1,10 @@
-class ProductPage {
+// pages/productPage.js
+const PageActions = require('../utils/pageActions');
+
+class ProductPage extends PageActions {
   constructor(page) {
-    this.page = page;
-    
+    super(page); // Inherit methods from PageActions class
+    // Page-specific locators
     this.products = page.locator('[data-test="product-name"]');
     this.name = page.locator('[data-test="product-name"]');
     this.price = page.locator('[data-test="unit-price"]');
@@ -17,13 +20,12 @@ class ProductPage {
   }
 
   async openFirstProduct() {
-    await this.products.first().waitFor({ state: 'visible', timeout: 15000 });
-    await this.products.first().click();
-      await this.name.first().waitFor({ state: 'visible', timeout: 10000 });
+    await this.waitForElement(this.products.first()); // Uses core waitForElement
+    await this.click(this.products.first()); // Uses core click method
   }
 
   async addToBasket() {
-    await this.addToCartBtn.click();
+    await this.click(this.addToCartBtn); // Uses core click method
   }
 }
 
