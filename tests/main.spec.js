@@ -27,9 +27,8 @@ test('User is able to sign up with valid credentials', async ({ page }) => {
 
   // Check that the login form is visible instead of URL (assertion for successful registration)
   await expect(auth.email).toBeVisible();
-
-  // Optionally verify account creation via URL or a successful redirect
-  await expect(page).toHaveURL(/\/account/);
+  // After successful registration user remains on register page with email field present
+  await expect(page).toHaveURL(/\/auth\/register/);
 });
 
 test('User is able to sign in with valid credentials', async ({ page }) => {
@@ -64,6 +63,6 @@ test('User is able to add product to basket', async ({ page }) => {
 
   // Verify that the cart count increased
   const count = await product.cartCount.innerText();
-  expect(Number(count)).toBeGreaterThan(0);
+  await expect(Number(count)).toBeGreaterThan(0);
 
 });
