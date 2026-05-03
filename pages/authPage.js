@@ -1,7 +1,10 @@
-class AuthPage {
-  constructor(page) {
-    this.page = page;
 
+const PageActions = require('./utils/pageActions'); // Import the utility functions from pageActions
+
+class AuthPage extends PageActions {
+  constructor(page) {
+    super(page);  // Inherit utility functions from PageActions class
+    
     // Login locators
     this.email = page.locator('[data-test="email"]').first();
     this.password = page.locator('[data-test="password"]').first();
@@ -24,36 +27,36 @@ class AuthPage {
   // Open login page
   async openLogin() {
     await this.page.goto('/auth/login');
-    await this.email.waitFor({ state: 'visible', timeout: 10000 });
+    await this.waitForElement(this.email);  // Using waitForElement from PageActions
   }
 
   // Login method
   async login(email, password) {
-    await this.email.fill(email);
-    await this.password.fill(password);
-    await this.loginBtn.waitFor({ state: 'visible', timeout: 10000 });
-    await this.loginBtn.click();
+    await this.fill(this.email, email);  // Using fill from PageActions
+    await this.fill(this.password, password);  // Using fill from PageActions
+    await this.waitForElement(this.loginBtn);  // Using waitForElement from PageActions
+    await this.click(this.loginBtn);  // Using click from PageActions
     await this.page.waitForURL(/account/, { timeout: 10000 });
   }
 
   // Go to registration form
   async goToRegister() {
-    await this.registerLink.click();
-    await this.firstName.waitFor({ state: 'visible', timeout: 10000 });
+    await this.click(this.registerLink);  // Using click from PageActions
+    await this.waitForElement(this.firstName);  // Using waitForElement from PageActions
   }
 
   // Registration method (safe for SPA / slow loading)
   async register(user) {
-    // Fill registration form
-    await this.firstName.fill(user.firstName);
-    await this.lastName.fill(user.lastName);
-    await this.dob.fill(user.dob);
-    await this.street.fill(user.street);
-    await this.postalCode.fill(user.postalCode);
-    await this.city.fill(user.city);
-    await this.state.fill(user.state);
+    // Fill registration form using inherited fill method
+    await this.fill(this.firstName, user.firstName);
+    await this.fill(this.lastName, user.lastName);
+    await this.fill(this.dob, user.dob);
+    await this.fill(this.street, user.street);
+    await this.fill(this.postalCode, user.postalCode);
+    await this.fill(this.city, user.city);
+    await this.fill(this.state, user.state);
     await this.country.selectOption({ label: user.country });
-    await this.phone.fill(user.phone);
+    await this.fill(this.phone, user.phone);
 
     // Fill visible email/password fields
     const regEmail = this.page.locator('[data-test="email"]:visible');
@@ -65,12 +68,12 @@ class AuthPage {
     await regPassword.waitFor({ state: 'visible', timeout: 10000 });
     await regPassword.fill(user.password);
 
-    // Click register button
-    await this.registerBtn.click();
+    // Click register button using inherited click method
+    await this.click(this.registerBtn);  // Using click from PageActions
 
     // Wait for login email field to appear instead of URL
-    await this.email.waitFor({ state: 'visible', timeout: 15000 });
+    await this.waitForElement(this.email);  // Using waitForElement from PageActions
   }
 }
 
-module.exports = { AuthPage };
+module.exports = { AuthPage };  // Export the AuthPage class for use in tests
