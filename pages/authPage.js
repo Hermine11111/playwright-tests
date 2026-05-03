@@ -1,6 +1,5 @@
-// pages/authPage.js
 
-const PageActions = require('../utils/pageActions');  // Import the utility functions from pageActions
+const PageActions = require('./utils/pageActions'); // Import the utility functions from pageActions
 
 class AuthPage extends PageActions {
   constructor(page) {
