@@ -1,5 +1,5 @@
 // pages/productPage.js
-const PageActions = require('../utils/pageActions');
+const PageActions = require('./utils/pageActions');
 
 class ProductPage extends PageActions {
   constructor(page) {
